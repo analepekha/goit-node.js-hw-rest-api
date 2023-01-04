@@ -3,6 +3,7 @@ const singIn = require("./singIn");
 const singOut = require("./singOut");
 const getCurrent = require("./getCurrent");
 const updateSubscription = require("./updateSubscription");
+const updateAvatar = require("./updateAvatar");
 
 module.exports = {
   singUp,
@@ -10,4 +11,5 @@ module.exports = {
   singOut,
   getCurrent,
   updateSubscription,
+  updateAvatar,
 };
