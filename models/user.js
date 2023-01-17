@@ -1,6 +1,6 @@
 const { Schema, model } = require("mongoose");
 const bcrypt = require("bcryptjs");
-const Joi = require("Joi");
+const joi = require("joi");
 
 const userSchema = new Schema(
   {
@@ -26,6 +26,14 @@ const userSchema = new Schema(
       type: String,
       default: null,
     },
+    verify: {
+      type: Boolean,
+      default: false,
+    },
+    verificationToken: {
+      type: String,
+      required: [true, "Verify token is required"],
+    },
   },
   { versionKey: false, timestamps: true }
 );
@@ -38,13 +46,19 @@ userSchema.methods.comparePassword = function (password) {
   return bcrypt.compareSync(password, this.password);
 };
 
-const joiUserSchema = Joi.object({
-  password: Joi.string().min(6).required(),
-  email: Joi.string().email().required(),
+const joiUserSchema = joi.object({
+  password: joi.string().min(6).required(),
+  email: joi.string().email().required(),
 });
 
-const updateSubscriptionSchema = Joi.object({
-  subscription: Joi.string().valid("starter", "pro", "business").required(),
+const updateSubscriptionSchema = joi.object({
+  subscription: joi.string().valid("starter", "pro", "business").required(),
+});
+
+const verifyEmailSchema = joi.object({
+  email: joi.string().required().messages({
+    "any.required": `Missing required field email`,
+  }),
 });
 
 const User = model("user", userSchema);
@@ -53,4 +67,5 @@ module.exports = {
   User,
   joiUserSchema,
   updateSubscriptionSchema,
+  verifyEmailSchema,
 };
