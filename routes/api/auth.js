@@ -6,9 +6,16 @@ const { auth: ctrl } = require("../../controllers");
 const {
   joiUserSchema,
   updateSubscriptionSchema,
+  verifyEmailSchema,
 } = require("../../models/user");
 
 router.post("/singup", validation(joiUserSchema), ctrlWrapper(ctrl.singUp));
+router.get("/verify/:verificationToken", ctrlWrapper(ctrl.verifyEmail));
+router.get(
+  "/verify",
+  validation(verifyEmailSchema),
+  ctrlWrapper(ctrl.resendVerifyEmail)
+);
 router.post("/singin", validation(joiUserSchema), ctrlWrapper(ctrl.singIn));
 router.get(
   "/singout",
